@@ -26,10 +26,18 @@ class CallbacksConfig:
     tensorboard_root_log_dir: Path
     checkpoint_model_filepath: Path
 
-    batch_size: int  # set batch size for training
-    epochs: int  # number of all epochs in training
-    patience: int  # number of epochs to wait to adjust lr if monitored value does not improve
-    stop_patience: int  # number of epochs to wait before stopping training if monitored value does not improve
-    threshold: float  # if train accuracy is < threshold adjust monitor accuracy, else monitor validation loss
-    factor: float  # factor to reduce lr by
-    ask_epoch: int
+
+@dataclass(frozen=True)
+class TrainingConfig:
+    root_dir: Path
+    trained_model_path: Path  # to store the trained model
+    base_model_path: Path  # load the base model
+
+    train_path: Path
+    test_path: Path
+    valid_path: Path
+
+    img_size: list
+    epochs: int
+    batch_size: int
+    learning_rate: float

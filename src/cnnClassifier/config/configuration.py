@@ -1,5 +1,6 @@
 from cnnClassifier.constants import *
-from cnnClassifier.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, CallbacksConfig
+from cnnClassifier.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, CallbacksConfig, \
+    TrainingConfig
 from cnnClassifier.utils.common import read_yaml, create_directories
 
 
@@ -55,21 +56,35 @@ class ConfigurationManager:
             Path(model_ckpt_dir),
             Path(config.tensorboard_root_log_dir)
         ])
-        param_config = self.params
 
         callback_config = CallbacksConfig(
             root_dir=Path(config.root_dir),
             tensorboard_root_log_dir=Path(config.tensorboard_root_log_dir),
-            checkpoint_model_filepath=Path(config.checkpoint_model_filepath),
-            batch_size=param_config.batch_size,  # set batch size for training
-            epochs=param_config.epochs,  # number of all epochs in training
-            patience=param_config.patience,  # number of epochs to wait to adjust lr if monitored value does not improve
-            stop_patience=param_config.stop_patience,
-            # number of epochs to wait before stopping training if monitored value does not improve
-            threshold=param_config.threshold,
-            # if train accuracy is < threshold adjust monitor accuracy, else monitor validation loss
-            factor=param_config.factor,  # factor to reduce lr by
-            ask_epoch=param_config.ask_epoch,  # number of epochs to run before asking if you want to halt training
+            checkpoint_model_filepath=Path(config.checkpoint_model_filepath)
         )
 
         return callback_config
+
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config.training
+        params = self.params
+
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir, "Chicken-fecal-images")
+        create_directories([
+            Path(training.root_dir)
+        ])
+
+        training_config = TrainingConfig(
+            root_dir=Path(training.root_dir),
+            trained_model_path=Path(training.trained_model_path),
+            base_model_path=Path(training.base_model_path),
+            train_path=Path(training.train_path),
+            test_path=Path(training.test_path),
+            valid_path=Path(training.valid_path),
+            img_size=params.IMAGE_SIZE,
+            epochs=params.epochs,
+            batch_size=params.batch_size,
+            learning_rate=params.LEARNING_RATE
+        )
+
+        return training_config
