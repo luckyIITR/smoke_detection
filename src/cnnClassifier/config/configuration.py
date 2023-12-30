@@ -1,6 +1,6 @@
 from cnnClassifier.constants import *
 from cnnClassifier.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, CallbacksConfig, \
-    TrainingConfig
+    TrainingConfig, EvaluationConfig
 from cnnClassifier.utils.common import read_yaml, create_directories
 
 
@@ -88,3 +88,15 @@ class ConfigurationManager:
         )
 
         return training_config
+
+    def get_validation_config(self) -> EvaluationConfig:
+        config = self.config.evaluation
+        eval_config = EvaluationConfig(
+            model_path=config.model_path,
+            test_path=config.test_path,
+            img_size=self.params.IMAGE_SIZE,
+            epochs=self.params.epochs,
+            batch_size = self.params.BATCH_SIZE,
+            learning_rate=self.params.LEARNING_RATE
+        )
+        return eval_config

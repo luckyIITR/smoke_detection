@@ -27,3 +27,8 @@ training:
   train_path: artifacts/data_ingestion/smoke_data/Training/Training
   test_path: artifacts/data_ingestion/smoke_data/Testing/Testing
   valid_path: artifacts/data_ingestion/smoke_data/Validation/Validation
+
+evaluation:
+  model_path: artifacts/training/trained_model.keras
+  test_path: artifacts/data_ingestion/smoke_data/Testing/Testing
+

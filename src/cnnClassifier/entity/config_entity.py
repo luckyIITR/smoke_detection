@@ -41,3 +41,14 @@ class TrainingConfig:
     epochs: int
     batch_size: int
     learning_rate: float
+
+
+@dataclass(frozen=True)
+class EvaluationConfig:
+    model_path: Path
+    test_path: Path
+
+    img_size: list
+    epochs: int
+    batch_size: int
+    learning_rate: float
