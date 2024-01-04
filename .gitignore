@@ -161,3 +161,4 @@ cython_debug/
 
 key_service_account.json
 artifacts/*
+smoke_detection.db

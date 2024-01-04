@@ -11,8 +11,7 @@ from cnnClassifier.utils.common import read_yaml
 class PredictionPipeline:
     def __init__(self):
         self.config = read_yaml(CONFIG_FILE_PATH)
-        # load model
-        self.model = load_model(self.config.training.trained_model_path)
+
         # self.params = read_yaml(PARAMS_FILE_PATH)
 
     @staticmethod
@@ -34,7 +33,9 @@ class PredictionPipeline:
         return image_bytes
 
     def predict(self, img):
-        prediction = self.model.predict(img, verbose=0)
+        # load model
+        model = load_model(self.config.training.trained_model_path)
+        prediction = model.predict(img, verbose=0)
         # predicted_label = np.argmax(prediction)
         print(f"Smoking with probability {prediction[0][1] * 100}")
         print(f"Non-Smoking with probability {prediction[0][0] * 100}")

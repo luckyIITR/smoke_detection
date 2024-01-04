@@ -16,4 +16,10 @@ Flask
 Flask-Cors
 google-cloud-storage
 requests
+python-jose[cryptography]
+fastapi
+uvicorn
+SQLAlchemy
+passlib
+python-multipart
 -e .
