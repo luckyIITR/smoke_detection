@@ -15,4 +15,5 @@ scipy
 Flask
 Flask-Cors
 google-cloud-storage
+requests
 -e .
