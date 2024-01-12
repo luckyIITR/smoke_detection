@@ -1,5 +1,7 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException
+from fastapi import APIRouter, File, UploadFile, HTTPException, Request, Response
 from starlette import status
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from cnnClassifier.pipeline.predict import PredictionPipeline
 
 
@@ -11,6 +13,17 @@ class ClientApp:
 
 router = APIRouter()
 clApp = ClientApp()
+templates = Jinja2Templates(directory="templates")
+
+
+@router.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("homepage.html", {"request": request})
+
+
+@router.get("/aboutme", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("aboutme.html", {"request": request})
 
 
 @router.get("/smoke_detection/", status_code=status.HTTP_200_OK)
