@@ -21,7 +21,6 @@ async def home(request: Request):
     return {"message" : "API is Running"}
 
 
-
 @router.post("/smoke_detection_url")
 async def detect_smoke_from_url(url: str = Form(...)):
     try:
