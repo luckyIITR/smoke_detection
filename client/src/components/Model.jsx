@@ -1,8 +1,20 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types';
+import { predictbyimage, predictbyurl } from "../store/actions/predict";
+import { connect } from 'react-redux';
+import Spinner from "./Spinner";
 
-function Model({ targetRef }) {
+
+const isObjectEmpty = (objectName) => {
+    return Object.keys(objectName).length === 0
+}
+
+function Model({ modelRef, predict, predictbyimage, predictbyurl }) {
+
     const [image, setimage] = useState('')
-    const [url, seturl] = useState('')
+    const [formData, setformData] = useState({
+        url: '',
+    })
 
     const fileHandle = e => {
         if (e.target.files.length !== 0) {
@@ -10,30 +22,36 @@ function Model({ targetRef }) {
         }
     }
 
-    const urlHandle = e =>{
-        seturl(e.target.value);
+    const urlHandle = e => {
+        setformData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const predict_image = e =>{
+
+    const predict_image = e => {
         e.preventDefault();
-        console.log(image);
+        const formData = new FormData();
+        formData.append('file', image, image.name);
+        const url = URL.createObjectURL(image);
+        predictbyimage({formData, url});
     }
 
-    const predict_url = e =>{
+    const predict_url = e => {
         e.preventDefault();
-        console.log(url);
+        // console.log(formData);
+
+        predictbyurl(formData);
     }
 
     return (
-        <div class="relative z-10 max-w-screen-lg mx-auto pt-10 h-screen" id="model" ref={targetRef}>
+        <div class="mx-auto container p-10" id="model" ref={modelRef}>
             {/* {#    <h2 class="text-4xl font-bold mb-4">ML Model</h2>#} */}
             <h1 class="text-4xl font-bold mb-4">Try It Now!</h1>
             <p class="text-10lg mb-10">Experience the power of image classification. Upload your images and see instant results!</p>
 
-            <div class="grid grid-cols-2 gap-4 ">
+            <div class="flex flex-wrap">
                 {/* <!-- First Column --> */}
-                <div>
-                    <div class="max-w-screen-lg mx-auto mb-8">
+                <div class="lg:w-1/2 p-2">
+                    <div >
                         <h2 class="text-3xl font-bold dark:text-black mb-4">Predict via Uploading Image</h2>
                         <form onSubmit={predict_image}>
                             <div class="mb-4">
@@ -50,12 +68,12 @@ function Model({ targetRef }) {
                         </form>
                     </div>
 
-                    <div class="max-w-screen-lg mx-auto my-8 my-20">
+                    <div>
                         <h2 class="text-3xl font-bold dark:text-black mb-4">Predict via Image URL</h2>
                         <form onSubmit={predict_url}>
                             <div class="mb-4">
                                 <label for="imageUrl" class="block text-gray-800 text-xl font-semibold mb-2">Image URL</label>
-                                <input onChange = {urlHandle}type="url" id="imageUrl" name="imageUrl" class="border rounded p-2 w-full" placeholder="https://example.com/image.jpg" required />
+                                <input onChange={urlHandle} type="url" id="url" name="url" class="border rounded p-2 w-full" placeholder="https://example.com/image.jpg" required />
                             </div>
                             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-full inline-flex items-center">
                                 <span class="mr-2">Predict</span>
@@ -69,10 +87,35 @@ function Model({ targetRef }) {
                 </div>
 
                 {/* <!-- Second Column --> */}
-                <div>
-                    <h2 class="text-3xl font-bold dark:text-black mb-4">Image Preview</h2>
-                    <div id="imagePreview" class="border border-gray-300 rounded-md p-4">
+                <div class="lg:w-1/2 p-2">
+                    <h2 class="text-3xl font-bold dark:text-black mb-4">Result</h2>
+                    <div id="imagePreview" class="border border-gray-300 rounded-md p-4 min-h-20">
                         {/* <!-- Image preview will be displayed here --> */}
+                        {
+                            !isObjectEmpty(predict.probability) && (<>
+                                <img src={predict.probability.url} alt="Fixed Size Image" class="w-40 h-40 object-cover rounded-md shadow-lg mx-auto" />
+                                <div className="max-w-sm mx-auto mt-4">
+                                    <div>
+                                        <div className="text-center">
+                                            <h1 className="text-2xl font-bold mb-4">Smoke Probability :</h1>
+                                            <h1 className="text-3xl text-red-500 font-bold mb-6">
+                                                {predict.probability.SmokingProbability}
+                                            </h1>
+                                            <h1 className="text-2xl font-bold mb-4">Non Smoke Probability :</h1>
+                                            <h1 className="text-3xl text-green-500 font-bold">
+                                                {predict.probability.NonSmokingProbability}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                            )
+                        }
+                        {
+                            predict.loading &&
+                            <Spinner />
+                        }
+
                     </div>
                 </div>
             </div>
@@ -81,4 +124,12 @@ function Model({ targetRef }) {
     )
 }
 
-export default Model
+Model.propTypes = {
+    predict: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    predict: state.predict
+});
+
+export default connect(mapStateToProps, { predictbyimage, predictbyurl })(Model)

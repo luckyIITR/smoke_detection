@@ -1,0 +1,6 @@
+export const SET_ALERT = "SET_ALERT";
+export const REMOVE_ALERT = "REMOVE_ALERT";
+export const PREDICT_ERROR = "PREDICT_ERROR";
+export const PREDICT_DONE = "PREDICT_DONE";
+export const PREDICT_STARTED = "PREDICT_STARTED";
+

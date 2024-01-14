@@ -1,6 +1,6 @@
 import React from 'react'
 
-function MainBody({scrollToElement}) {
+function MainBody({ scrolltarget }) {
     return (
         <div class="relative z-10 max-w-screen-lg mx-auto my-20">
             <h1 class="text-6xl font-bold mb-4">Image Detection smokers and non smokers</h1>
@@ -8,7 +8,7 @@ function MainBody({scrollToElement}) {
                 Empowering businesses and individuals with accurate image classification for a smoke-free environment.
             </p>
             <div class="flex space-x-4 mt-6">
-                <button onClick={scrollToElement} class="bg-blue-500 text-white py-2 px-4 rounded-full inline-flex items-center">
+                <button onClick={scrolltarget} class="bg-blue-500 text-white py-2 px-4 rounded-full inline-flex items-center">
                     <span class="mr-2">Model</span>
                     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6">
                         <path d="M8 13L13 8L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"></path>

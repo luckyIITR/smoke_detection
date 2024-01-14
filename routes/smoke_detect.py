@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, HTTPException, Request, Response
+from fastapi import APIRouter, File, Form, UploadFile, HTTPException, Request, Response
 from starlette import status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -16,9 +16,9 @@ clApp = ClientApp()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/", response_class=HTMLResponse)
+@router.get("/", status_code=status.HTTP_200_OK)
 async def home(request: Request):
-    return templates.TemplateResponse("homepage.html", {"request": request})
+    return {"message" : "API is Running"}
 
 
 @router.get("/aboutme", response_class=HTMLResponse)
@@ -26,8 +26,8 @@ async def home(request: Request):
     return templates.TemplateResponse("aboutme.html", {"request": request})
 
 
-@router.get("/smoke_detection/", status_code=status.HTTP_200_OK)
-async def detect_smoke_from_url(url: str):
+@router.post("/smoke_detection_url")
+async def detect_smoke_from_url(url: str = Form(...)):
     try:
         # Validate URL (you may want to use a more robust URL validation method)
         if not url.startswith("http"):
@@ -47,7 +47,7 @@ async def detect_smoke_from_url(url: str):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid URL")
 
 
-@router.post("/smoke_detection")
+@router.post("/smoke_detection_img")
 async def detect_smoke_from_image(file: UploadFile = File(...)):
     image_bytes = await file.read()
     img = clApp.classifier.preprocess_image(image_bytes)
