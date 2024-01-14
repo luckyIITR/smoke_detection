@@ -21,10 +21,6 @@ async def home(request: Request):
     return {"message" : "API is Running"}
 
 
-@router.get("/aboutme", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("aboutme.html", {"request": request})
-
 
 @router.post("/smoke_detection_url")
 async def detect_smoke_from_url(url: str = Form(...)):
