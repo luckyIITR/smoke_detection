@@ -12,3 +12,4 @@ blob.download_to_filename("smoke_artifacts.zip")
 unzip_path = ""
 with zipfile.ZipFile("smoke_artifacts.zip", 'r') as zip_ref:
     zip_ref.extractall(unzip_path)
+os.remove("smoke_artifacts.zip")
