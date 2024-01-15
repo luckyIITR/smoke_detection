@@ -125,7 +125,7 @@ class Training:
         self.model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
                            optimizer=tf.keras.optimizers.Adam(learning_rate=self.config.learning_rate),
                            metrics=['accuracy'])
-        fine_tune_epochs = self.config.epochs + 5
+        fine_tune_epochs = self.config.epochs + 10
         self.history = self.model.fit(self.train_gen, epochs=fine_tune_epochs,
                                       steps_per_epoch=len(self.train_gen),
                                       initial_epoch=self.history.epoch[-1],
