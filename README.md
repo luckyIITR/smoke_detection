@@ -136,11 +136,11 @@ open up you local host and port
 
 ## Run from terminal:
 
-docker build -t smoke_detectionapp.azurecr.io/chicken:latest .
+docker build -t smoke_detectionapp.azurecr.io/smoke:latest .
 
 docker login smoke_detectionapp.azurecr.io
 
-docker push smoke_detectionapp.azurecr.io/chicken:latest
+docker push smoke_detectionapp.azurecr.io/smoke:latest
 
 
 ## Deployment Steps:
